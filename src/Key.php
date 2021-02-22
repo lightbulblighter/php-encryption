@@ -38,7 +38,7 @@ final class Key
      */
     public static function createFromExternalString($external_key_string)
     {
-        return new Key(substr($external_key_string, 0, 32));
+        return new Key(substr($external_key_string, 0, self::KEY_BYTE_SIZE));
     }
 
     /**
