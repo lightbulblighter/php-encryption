@@ -25,6 +25,21 @@ final class Key
     {
         return new Key(Core::secureRandom(self::KEY_BYTE_SIZE));
     }
+    
+    /**
+     * Creates a Key from an existing external string.
+     *
+     * Unless you do not have an external key (set by a configuration file or environment),
+     * it is better to just call createNewRandomKey.
+     *
+     * @param string $external_key_string
+     *
+     * @return Key
+     */
+    public static function createFromExternalString($external_key_string)
+    {
+        return new Key(substr($external_key_string, 0, 32));
+    }
 
     /**
      * Loads a Key from its encoded form.
