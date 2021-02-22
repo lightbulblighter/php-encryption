@@ -33,12 +33,26 @@ final class Key
      * it is better to just call createNewRandomKey.
      *
      * @param string $external_key_string
+     * @param bool $throw_exception_if_too_long (default: false)
+     * @param bool $do_not_trim (default: false)
+     *
+     * @throws Ex\EnvironmentIsBrokenException
      *
      * @return Key
      */
-    public static function createFromExternalString($external_key_string)
+    public static function createFromExternalString($external_key_string, $throw_exception_if_too_long = false, $do_not_trim = false)
     {
-        return new Key(substr($external_key_string, 0, self::KEY_BYTE_SIZE));
+        if (!$do_not_trim) {
+            $external_key_string = Encoding::trimTrailingWhitespace($external_key_string);
+        }
+        if (!$throw_exception_if_too_long) {
+            Core::ensureTrue(
+                Core::ourStrlen($external_key_string) === self::KEY_BYTE_SIZE,
+                'External key is too long.'
+            );
+        }
+        $key_bytes = substr($external_key_string, 0, self::KEY_BYTE_SIZE);
+        return new Key($key_bytes);
     }
 
     /**
